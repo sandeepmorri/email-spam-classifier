@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Classifier</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Email Spam Classifier</h2>
+        <textarea id="email_text" rows="5" placeholder="Enter email content here..."></textarea>
+        <button id="classify_btn">Classify</button>
+        <p><strong>Result:</strong> <span id="result"></span></p>
+    </div>
+
+    <script>
+        function classifyEmail() {
+            let email_text = $("#email_text").val().trim();
+            if (email_text === "") {
+                $("#result").text("Please enter an email!");
+                return;
+            }
+    
+            $.post("/predict", { email_text: email_text }, function(data) {
+                $("#result").text(data.prediction);
+            });
+        }
+    
+        // Click button to classify
+        $("#classify_btn").click(classifyEmail);
+    
+        // Press "Enter" key to classify
+        $("#email_text").keypress(function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                classifyEmail();
+            }
+        });
+    
+        // Clear result when user types
+        $("#email_text").on("input", function() {
+            $("#result").text("");
+        });
+    </script>
+    
+</body>
+</html>
