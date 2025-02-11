@@ -4,6 +4,7 @@ nltk.download('stopwords')
 import string
 from string import punctuation
 from nltk.stem.porter import PorterStemmer
+nltk.download('punkt_tab')
 ps = PorterStemmer()
 def preprocess_text(text):
     text = text.lower()
